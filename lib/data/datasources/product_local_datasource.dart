@@ -6,9 +6,6 @@ import '../../core/database/database_helper.dart';
 import '../models/product_model.dart';
 
 abstract class ProductLocalDataSource {
-  /// Returns null if this query has never been cached — distinct from an
-  /// empty list, which means it *was* searched before and legitimately
-  /// returned no results.
   Future<List<Product>?> getCachedSearch(String query);
 
   Future<void> cacheSearch(String query, List<Product> products);
@@ -19,8 +16,7 @@ class ProductLocalDataSourceImpl implements ProductLocalDataSource {
 
   ProductLocalDataSourceImpl(this._dbHelper);
 
-  // Cache key is normalized so "Phone", " phone ", and "PHONE" share one
-  // cache entry instead of three.
+
   String _normalize(String query) => query.trim().toLowerCase();
 
   @override

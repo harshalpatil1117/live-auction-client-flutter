@@ -20,9 +20,6 @@ class ProductRepositoryImpl implements ProductRepository {
     required int limit,
     required int skip,
   }) {
-    // The assignment only requires offline caching for search, not the
-    // main feed, so pagination just delegates straight to the network —
-    // adding feed caching here would be solving a problem we don't have.
     return _remote.getProducts(limit: limit, skip: skip);
   }
 
@@ -41,14 +38,9 @@ class ProductRepositoryImpl implements ProductRepository {
 
     try {
       final results = await _remote.searchProducts(query);
-      // Cache is a write-behind side effect — don't make the caller wait
-      // on the disk write before seeing their search results.
       unawaited(_local.cacheSearch(query, results));
       return results;
     } on ApiException {
-      // Connectivity said "online" but the request still failed (e.g. wifi
-      // with no real internet — see ConnectivityService note). Fall back
-      // to cache if we have it before giving up.
       final cached = await _local.getCachedSearch(query);
       if (cached != null) return cached;
       rethrow;

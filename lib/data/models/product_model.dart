@@ -1,8 +1,3 @@
-/// The dummyjson product shape has many more fields than this; we only keep
-/// what the three screens actually display. Every field uses a defensive
-/// default because the "unexpected/malformed API response" edge case means
-/// we shouldn't assume any field is always present (e.g. `brand` is missing
-/// for some categories like groceries).
 class Product {
   final int id;
   final String title;
@@ -49,8 +44,6 @@ class Product {
     );
   }
 
-  /// Only needed so we can serialize a product list into the sqlite cache
-  /// (as JSON text) and read it back — not a network payload.
   Map<String, dynamic> toJson() {
     return {
       'id': id,

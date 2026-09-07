@@ -6,9 +6,6 @@ import '../core/network/api_exception.dart';
 import '../data/models/product_model.dart';
 import '../domain/repositories/product_repository.dart';
 
-/// Named SearchScreenController (not SearchController) to avoid colliding
-/// with Flutter's own material.dart `SearchController` class used by
-/// SearchAnchor.
 class SearchScreenController extends GetxController {
   final ProductRepository _repository;
 
@@ -20,7 +17,7 @@ class SearchScreenController extends GetxController {
   final RxList<Product> results = <Product>[].obs;
   final RxBool isSearching = false.obs;
   final RxnString errorMessage = RxnString();
-  final RxBool hasSearched = false.obs; // distinguishes "no query" from "no results"
+  final RxBool hasSearched = false.obs;
 
   Timer? _debounceTimer;
   int _requestId = 0;
@@ -37,8 +34,6 @@ class SearchScreenController extends GetxController {
       return;
     }
 
-    // Cancel-and-restart debounce: every keystroke replaces the pending
-    // timer, so only the last keystroke in a burst ever fires a request.
     _debounceTimer = Timer(_debounceDuration, () => _search(value));
   }
 
@@ -50,10 +45,6 @@ class SearchScreenController extends GetxController {
     try {
       final products = await _repository.searchProducts(term);
 
-      // Stale-response guard: if the user kept typing while this request
-      // was in flight, _requestId has already moved past requestId — a
-      // newer request is either in flight or has already resolved, so
-      // this older result must not overwrite it.
       if (requestId != _requestId) return;
 
       results.assignAll(products);
@@ -70,8 +61,6 @@ class SearchScreenController extends GetxController {
 
   @override
   void onClose() {
-    // Prevents a pending debounced search from firing after the screen
-    // (and this controller) has already been disposed.
     _debounceTimer?.cancel();
     super.onClose();
   }

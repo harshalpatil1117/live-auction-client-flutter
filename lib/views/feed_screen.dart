@@ -8,7 +8,6 @@ import '../routes/app_routes.dart';
 class FeedScreen extends GetView<FeedController> {
   const FeedScreen({super.key});
 
-  // How close to the bottom (in pixels) before the next page is requested.
   static const _paginationThreshold = 200.0;
 
   @override

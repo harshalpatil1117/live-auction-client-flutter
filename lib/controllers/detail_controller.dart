@@ -19,8 +19,6 @@ class DetailController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // UI never touches Timer.periodic directly — it only ever reacts to
-    // values already computed in the domain layer.
     _subscription = _timer.elapsed.listen((duration) {
       elapsedDisplay.value = formatElapsed(duration);
     });
@@ -29,9 +27,6 @@ class DetailController extends GetxController {
 
   @override
   void onClose() {
-    // Runs when the user navigates away from the detail screen — stops the
-    // stream subscription and the underlying periodic Timer so neither
-    // leaks past the screen's lifetime.
     _subscription?.cancel();
     _timer.dispose();
     super.onClose();

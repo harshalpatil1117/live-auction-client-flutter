@@ -18,8 +18,6 @@ class SearchScreen extends GetView<SearchScreenController> {
             hintText: 'Search products…',
             border: InputBorder.none,
           ),
-          // Live search: fires on every change, no submit button. Actual
-          // network calls are debounced inside the controller.
           onChanged: controller.onQueryChanged,
         ),
       ),

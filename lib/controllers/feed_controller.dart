@@ -13,12 +13,12 @@ class FeedController extends GetxController {
 
   final RxList<Product> products = <Product>[].obs;
 
-  final RxBool isLoading = false.obs; // initial load only
-  final RxBool isLoadingMore = false.obs; // pagination load only
+  final RxBool isLoading = false.obs;
+  final RxBool isLoadingMore = false.obs;
   final RxBool hasMore = true.obs;
 
-  final RxnString errorMessage = RxnString(); // full-screen error (initial load)
-  final RxnString paginationError = RxnString(); // inline footer error
+  final RxnString errorMessage = RxnString();
+  final RxnString paginationError = RxnString();
 
   int _skip = 0;
 
@@ -46,8 +46,6 @@ class FeedController extends GetxController {
   }
 
   Future<void> loadMore() async {
-    // Guards: no duplicate in-flight pagination requests, no fetching past
-    // the end of the dataset, and don't race with the initial load.
     if (isLoadingMore.value || isLoading.value || !hasMore.value) return;
 
     isLoadingMore.value = true;
@@ -55,11 +53,10 @@ class FeedController extends GetxController {
 
     try {
       final page = await _repository.getProducts(limit: _pageSize, skip: _skip);
-      products.addAll(page.products); // existing items are never cleared
+      products.addAll(page.products);
       _skip = page.skip + page.products.length;
       hasMore.value = page.hasMore;
     } on ApiException catch (e) {
-      // Already-loaded items stay on screen; only the footer shows the error.
       paginationError.value = e.message;
     } finally {
       isLoadingMore.value = false;

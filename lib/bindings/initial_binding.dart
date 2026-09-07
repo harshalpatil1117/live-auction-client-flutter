@@ -9,10 +9,7 @@ import '../data/datasources/product_remote_datasource.dart';
 import '../data/repositories/product_repository_impl.dart';
 import '../domain/repositories/product_repository.dart';
 
-/// Registers app-wide singletons once, at startup. Per-screen controllers
-/// are registered in their own route-level Bindings (see FeedBinding etc.)
-/// so they're created/disposed alongside their screen instead of living
-/// for the app's whole lifetime.
+
 class InitialBinding extends Bindings {
   @override
   void dependencies() {

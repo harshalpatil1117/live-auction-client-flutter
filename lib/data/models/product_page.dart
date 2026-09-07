@@ -26,7 +26,5 @@ class ProductPage {
     );
   }
 
-  /// Single source of truth for "is there another page" — computed once
-  /// here rather than re-derived with ad-hoc arithmetic in the controller.
   bool get hasMore => skip + products.length < total;
 }

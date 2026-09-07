@@ -1,8 +1,5 @@
 import 'package:dio/dio.dart';
 
-/// Just a configured Dio instance. Not wrapped in extra abstractions —
-/// Dio itself is already the abstraction; the exception mapping that keeps
-/// Dio out of the rest of the app happens in the remote data source.
 class DioClient {
   DioClient._();
 
